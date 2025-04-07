@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    --primary-green: #004d00;
+}
+
+.sidebar-light {
+    background-color: var(--primary-green);
+}
+
+.sidebar-dark-olive .nav-sidebar>.nav-item>.nav-link.active,
+.sidebar-light-olive .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: var(--primary-green);
+    color: #fff;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.footer-link {
+    color: var(--primary-green);
+}
+
+.footer-link:hover {
+    color: #D48614;
+}
+
+.control-sidebar-light a {
+    color: var(--primary-green);
+}
+
+.content-card {
+    margin-top: 15px;
+}
+
+.card-header {
+    background-color: var(--primary-green);
+}
+
+.table-fixed {
+    table-layout: fixed;
+}
+
+#image {
+    width: 250px;
+    height: 325px;
+    margin-top: 30px;
+    border: #cecece solid 1px;
+}
+
+#qr {
+    width: 250px;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    border: #cecece solid 1px;
+}
+
+.small-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 145px;
+    background: #f7f7f7;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.small-box .inner {
+    flex: 1;
+}
+
+.small-box-footer {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: block;
+    color: #000;
+    text-decoration: none;
+}
+
+#day {
+    padding-left: 25px;
+    font-size: 16px;
+}
+
+#clock {
+    padding-right: 20px;
+    font-size: 16px;
+}
+
+#scanner {
+    margin-top: 30px;
+    border: black solid 1px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#qr-code {
+    width: 250px;
+    height: 250px;
+    margin-top: 5px;
+    margin-left: 390px;
+}
+
+#inertia-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1031;
+    /* Ensure it appears above other elements */
+}
+
+#inertia-progress .progress-bar {
+    background-color: #2ecc71;
+    /* Match the color defined in app.js */
+    height: 2px;
+    /* Match the height defined in app.js */
+}

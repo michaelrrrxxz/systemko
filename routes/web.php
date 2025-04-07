@@ -1,0 +1,22 @@
+<?php
+
+use App\Http\Controllers\PlaceController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
+
+Route::get('/', function () {
+    return Inertia::render('LandingPage');
+})->name('/');
+
+Route::group(['middleware' => 'sleep'], function () {
+    Route::resource('users', UserController::class);
+    Route::resource('dashboard', DashboardController::class)->only(['index']);
+    Route::resource('places', PlaceController::class);
+});
+
+Route::group(['middleware' => 'sleep'], function () {
+    require __DIR__ . '/auth.php';
+});
+
