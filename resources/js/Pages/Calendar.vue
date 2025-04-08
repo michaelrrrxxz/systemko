@@ -18,18 +18,29 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="venues-modal-label">Add Event</h4>
+                        <h4 class="modal-title" id="venues-modal-label">Add Event on  {{ selectedDate }}</h4>
                         <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form @submit.prevent="submitEvent">
+                            <p><strong>Selected Date:</strong> {{ selectedDate }}</p>
+                            <label for="name">Name</label>
+                            <input type="text" v-model="name" class="form-control">
                             <label for="venue">Venue</label>
-                            <select name="venue" id="venue" class="form-select" v-model="selectedVenue">
-                            <option value="">Select a venue</option>
-                            <option v-for="venue in venues" :key="venue.id" :value="venue.id">
-                                {{ venue.name }}
-                            </option>
+                            <select name="venue" id="venue" class="form-select" v-model="selectedVenue" required>
+                                <option value="">Select a venue</option>
+                                <option v-for="venue in venues" :key="venue.id" :value="venue.id">
+                                    {{ venue.name }}
+                                </option>
                             </select>
+
+                            <label for="start_time">Start Time</label>
+                            <input type="time" id="start_time" v-model="startTime" class="form-control" required />
+
+                            <label for="end_time">End Time</label>
+                            <input type="time" id="end_time" v-model="endTime" class="form-control" required />
+
+                            <button type="submit" class="btn btn-primary mt-3">Add Event</button>
                         </form>
                     </div>
                 </div>
@@ -43,6 +54,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import AdminLayout from '../Layouts/AdminLayout.vue';
+import Swal from 'sweetalert2';
 
 export default {
     layout: AdminLayout,
@@ -50,41 +62,108 @@ export default {
         events: Array,
         venues: Array,
     },
+    data() {
+        return {
+            selectedDate: null,
+            selectedVenue: null,
+            name: '',
+            description: '',
+            startTime: '',
+            endTime: '',
+            calendar: null,
+        };
+    },
     mounted() {
-        // Initialize FullCalendar
         const calendarEl = document.getElementById('calendar');
         this.calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin, interactionPlugin],
             initialView: 'dayGridMonth',
-            events: this.events, // Load events
-            editable: true, // Allow drag-and-drop
-            selectable: true, // Allow date selection
-            dateClick: this.handleDateClick, // Handle date clicks
-            eventClick: this.handleEventClick, // Handle event clicks
+            events: this.events,
+            editable: true,
+            selectable: true,
+            dateClick: this.handleDateClick,
+            eventClick: this.handleEventClick,
         });
         this.calendar.render();
     },
     methods: {
-
         closeModal() {
-            // Close the modal
-            const modal = new bootstrap.Modal(document.getElementById('calendar-modal'));
-            modal.hide();
+            const modalElement = document.getElementById('calendar-modal');
+            const modal = bootstrap.Modal.getInstance(modalElement); // Ensure we get the existing instance
+            if (modal) {
+                modal.hide();
+            }
         },
-
-
         handleDateClick(info) {
+            const selectedDate = new Date(info.dateStr);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+
+            if (selectedDate < today) {
+                Swal.fire('Error', 'You cannot add events to past dates.', 'error');
+                return;
+            }
+
+            this.selectedDate = info.dateStr;
             const modal = new bootstrap.Modal(document.getElementById('calendar-modal'));
             modal.show();
-            // alert(`Date clicked: ${info.dateStr}`);
         },
-        handleEventClick(info) {
-            // Triggered when an event is clicked
-            alert(`Event clicked: ${info.event.title}`);
+        async submitEvent() {
+            if (!this.selectedVenue || !this.startTime || !this.endTime) {
+                Swal.fire('Error', 'Please fill in all fields.', 'error');
+                return;
+            }
+
+            try {
+                const response = await axios.post('/calendar', {
+                    name: this.name,
+                    description: this.description,
+                    date: this.selectedDate,
+                    venue_id: this.selectedVenue,
+                    start_time: this.startTime,
+                    end_time: this.endTime,
+                });
+
+                if (response.data.success) {
+                    Swal.fire('Success', 'Event added successfully!', 'success');
+                    this.calendar.addEvent(response.data.event); // Add event to calendar
+
+                  
+                    this.closeModal();
+                } else {
+                    Swal.fire('Error', response.data.message, 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', error.response?.data?.message || 'An error occurred.', 'error');
+            }
+        },
+        async handleEventClick(info) {
+            const eventId = info.event.id;
+
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to delete this event?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await axios.delete(`/calendar/${eventId}`);
+
+                    if (response.data.success) {
+                        Swal.fire('Deleted!', response.data.message, 'success');
+                        info.event.remove();
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'An error occurred while deleting the event.', 'error');
+                }
+            }
         },
     },
     beforeDestroy() {
-        // Destroy the calendar instance
         if (this.calendar) {
             this.calendar.destroy();
         }
