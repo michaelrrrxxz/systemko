@@ -16,7 +16,13 @@ export default {
             newUser: {
                 name: '',
                 email: '',
+                password: '',
                 role: '',
+            },
+            errors: {
+                name: '',
+                email: '',
+                password: '',
             },
         };
     },
@@ -29,10 +35,55 @@ export default {
             const modal = bootstrap.Modal.getInstance(document.getElementById('users-modal'));
             modal.hide();
         },
+        validateForm() {
+            let isValid = true;
+
+            // Validate name
+            if (!this.newUser.name) {
+                this.errors.name = 'Name is required.';
+                isValid = false;
+            } else {
+                this.errors.name = '';
+            }
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!this.newUser.email) {
+                this.errors.email = 'Email is required.';
+                isValid = false;
+            } else if (!emailRegex.test(this.newUser.email)) {
+                this.errors.email = 'Invalid email format.';
+                isValid = false;
+            } else {
+                this.errors.email = '';
+            }
+
+            // Validate password
+            if (!this.newUser.password) {
+                this.errors.password = 'Password is required.';
+                isValid = false;
+            } else if (this.newUser.password.length < 8) {
+                this.errors.password = 'Password must be at least 8 characters.';
+                isValid = false;
+            } else {
+                this.errors.password = '';
+            }
+
+            return isValid;
+        },
         saveUser() {
-            console.log('Saving user:', this.newUser);
-            this.newUser = { name: '', email: '', role: '' };
-            this.closeModal();
+            if (this.validateForm()) {
+                console.log('Saving user:', this.newUser);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'User has been saved successfully.',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                this.newUser = { name: '', email: '', password: '', role: '' };
+                this.closeModal();
+            }
         },
         deleteUser(userId) {
             Swal.fire({
@@ -123,17 +174,32 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="users-modal-label">User Form</h4>
-                    <!-- <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button> -->
+                    <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>
                 </div>
-                <form @submit.prevent="saveUser">
+                <form @submit.prevent="saveUser" novalidate>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" class="form-control" v-model="newUser.name" required />
+                            <label>Name</label>
+                            <input type="text" class="form-control" v-model="newUser.name"
+                                :class="{ 'is-invalid': errors.name }" required />
+                            <div class="invalid-feedback">{{ errors.name }}</div>
+
                             <label>Email</label>
-                            <input type="email" class="form-control" v-model="newUser.email" required />
+                            <input type="email" class="form-control" v-model="newUser.email"
+                                :class="{ 'is-invalid': errors.email }" required />
+                            <div class="invalid-feedback">{{ errors.email }}</div>
+
+                            <label>Password</label>
+                            <input type="password" class="form-control" v-model="newUser.password"
+                                :class="{ 'is-invalid': errors.password }" required />
+                            <div class="invalid-feedback">{{ errors.password }}</div>
+
                             <label>Role</label>
-                            <input type="text" class="form-control" v-model="newUser.role" required />
+                            <select class="form-control" v-model="newUser.role" required>
+                                <option value="" disabled>Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="user">User</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -141,7 +207,7 @@ export default {
                             Close
                         </button>
                         <button type="reset" class="btn btn-warning"
-                            @click="newUser = { name: '', email: '', role: '' }">
+                            @click="newUser = { name: '', email: '', password: '', role: '' }">
                             Reset
                         </button>
                         <button type="submit" class="btn btn-success">

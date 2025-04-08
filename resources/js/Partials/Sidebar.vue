@@ -39,12 +39,22 @@ import { Link } from '@inertiajs/vue3';
                     </li>
                     <li class="nav-item">
                         <Link
-                                :href="route('places.index')"
+                                :href="route('venues.index')"
                                 class="nav-link"
-                                :class="{ active: $page.url.startsWith('/places') }"
+                                :class="{ active: $page.url.startsWith('/venues') }"
                             >
                         <i class="nav-icon fas fa-map-marker"></i>
                         <p>Venue</p>
+                        </Link>
+                    </li>
+                    <li class="nav-item">
+                        <Link
+                                :href="route('calendar.index')"
+                                class="nav-link"
+                                :class="{ active: $page.url.startsWith('/calendar') }"
+                            >
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>Calendar</p>
                         </Link>
                     </li>
             </ul>
