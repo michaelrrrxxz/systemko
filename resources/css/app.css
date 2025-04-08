@@ -46,8 +46,12 @@ input::-webkit-inner-spin-button {
     margin-top: 15px;
 }
 
-.card-header {
+.card-header, .modal-header {
     background-color: var(--primary-green);
+}
+
+.modal-title {
+    color: #fff;
 }
 
 .table-fixed {

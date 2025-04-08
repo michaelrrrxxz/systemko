@@ -7,11 +7,11 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <aside class="main-sidebar elevation-4 sidebar-light-olive">
-    <a href="" class="brand-link" style="background-color: #004d00;"><img src="" class="brand-image img-circle elevation-3" style="opacity:0.8;" alt=""><span class="brand-text font-weight-light text-white">MA</span></a>
+    <a href="" class="brand-link" style="background-color: #004d00;"><img src="" class="brand-image img-circle elevation-3" style="opacity:0.8;" alt=""><span class="brand-text font-weight-light text-white">Michael Angelo</span></a>
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-                <a href="#" class="d-block">User Name</a>
+                <a href="#" class="d-block">Code ni Mangaoang</a>
             </div>
         </div>
         <nav class="mt-2 mb-0">
@@ -23,7 +23,7 @@ import { Link } from '@inertiajs/vue3';
                                 class="nav-link"
                                 :class="{ active: $page.url.startsWith('/dashboard') }"
                             >
-                        <i class="nav-icon fas "></i>
+                        <i class="nav-icon fas fa-tachometer"></i>
                         <p>Dashboard</p>
                         </Link>
                     </li>

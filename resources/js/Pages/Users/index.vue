@@ -1,13 +1,12 @@
 <script>
 import AdminLayout from '../../Layouts/AdminLayout.vue';
-
 import { Link, router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
 
 export default {
     layout: AdminLayout,
     components: {
-    
-        Link
+        Link,
     },
     props: {
         users: Array,
@@ -17,67 +16,103 @@ export default {
             newUser: {
                 name: '',
                 email: '',
+                role: '',
             },
-            isModalOpen: false,
         };
     },
     methods: {
+        openModal() {
+            const modal = new bootstrap.Modal(document.getElementById('users-modal'));
+            modal.show();
+        },
+        closeModal() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('users-modal'));
+            modal.hide();
+        },
+        saveUser() {
+            console.log('Saving user:', this.newUser);
+            this.newUser = { name: '', email: '', role: '' };
+            this.closeModal();
+        },
         deleteUser(userId) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                router.delete(route('users.destroy', { user: userId }), {
-                    onSuccess: () => {
-                        alert('User deleted successfully.');
-                    },
-                    onError: () => {
-                        alert('Failed to delete the user.');
-                    }
-                });
-            }
-        }
-    }
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.delete(route('users.destroy', { user: userId }), {
+                        onSuccess: () => {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'User has been deleted successfully.',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        },
+                        onError: () => {
+                            Swal.fire({
+                                position: 'top-right',
+                                icon: 'error',
+                                title: 'Failed to delete the user.',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        },
+                    });
+                }
+            });
+        },
+    },
 };
 </script>
 
 <template>
-    <div class="container mt-5">
-        <div class="card border-0 shadow-lg rounded-3">
+    <div class="col-12 content-card">
+        <div class="card">
             <div class="card-header">
-                <h1 class="card-title text-dark">Users List</h1>
+                <h3 class="card-title text-white">Users List</h3>
                 <div class="card-tools">
-                    <!-- Trigger Modal -->
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#users-modal">
-                        <i class="fa fa-plus" aria-hidden="true"></i> <span>Create User</span>
+                    <button @click="openModal" class="btn btn-sm btn-success" data-toggle="tooltip"
+                        data-placement="bottom" title="Add Place">
+                        <i class="fas fa-plus text-white"></i> Add User
                     </button>
                 </div>
             </div>
-            <div class="card-body p-4">
-                <table class="table table-bordered table-hover shadow-sm rounded-3 custom-table">
-                    <thead class="table-light">
-                        <tr class="text-muted">
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in users" :key="user.id">
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td class="space-between d-flex">
-                                <!-- Edit Button -->
-                                <Link :href="route('users.edit', { user: user.id })" class="btn btn-primary btn-sm">
-                                Edit
-                                </Link>
-                                <!-- Delete Button -->
-                                <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div class="card-body">
+                <div>
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead class="table-light">
+                            <tr class="text-muted">
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in users" :key="user.id">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td class="space-between d-flex">
+                                    <Link :href="route('users.edit', { user: user.id })" class="btn btn-primary btn-sm">
+                                    Edit
+                                    </Link>
+                                    <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -88,26 +123,28 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="users-modal-label">User Form</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button> -->
                 </div>
-                <form id="users-form">
+                <form @submit.prevent="saveUser">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" class="form-control" name="username" id="username" required />
-                            <label>Password</label>
-                            <input type="password" class="form-control" name="password" id="password" required />
+                            <input type="text" class="form-control" v-model="newUser.name" required />
+                            <label>Email</label>
+                            <input type="email" class="form-control" v-model="newUser.email" required />
                             <label>Role</label>
-                            <input type="text" class="form-control" name="role" id="role" required />
+                            <input type="text" class="form-control" v-model="newUser.role" required />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="id" id="id" />
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-secondary" @click="closeModal">
                             Close
                         </button>
-                        <button type="reset" class="btn btn-warning">Reset</button>
-                        <button type="submit" class="btn btn-success" name="save">
+                        <button type="reset" class="btn btn-warning"
+                            @click="newUser = { name: '', email: '', role: '' }">
+                            Reset
+                        </button>
+                        <button type="submit" class="btn btn-success">
                             Save
                         </button>
                     </div>
@@ -116,44 +153,3 @@ export default {
         </div>
     </div>
 </template>
-
-<style scoped>
-/* Table Card Styling */
-.card {
-    border-radius: 15px;
-}
-
-/* Table Border and Shadows */
-.custom-table {
-    border: 1px solid #ddd;
-    border-radius: 12px;
-}
-
-.custom-table th {
-    font-weight: 600;
-}
-
-/* Hover Effects on Rows */
-.custom-table tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    transition: background-color 0.3s ease;
-}
-
-/* Light Table Header */
-.table-light {
-    background-color: #f7f7f7;
-}
-
-/* Header Styling */
-.card-header {
-    padding: 16px 24px;
-    background-color: #fff;
-    border-bottom: 1px solid #e1e1e1;
-}
-
-/* Table Cell Padding */
-.table td,
-.table th {
-    padding: 12px 15px;
-}
-</style>

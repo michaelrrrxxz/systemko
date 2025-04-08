@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Place;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 
-class PlaceController extends Controller
+class VenueController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $places = Place::all();
-        return inertia('Places', [
-            'places' => $places,
+        $venue = Venue::all();
+        return inertia('Venues', [
+            'venues' => $venue,
         ]);
     }
 
@@ -38,15 +38,15 @@ class PlaceController extends Controller
         ]);
 
         // Create the new place
-        Place::create($request->all());
+        Venue::create($request->all());
 
-        return redirect()->route('places.index'); 
+        return redirect()->route('venues.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Place $place)
+    public function show(Venue $venue)
     {
         //
     }
@@ -54,15 +54,16 @@ class PlaceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Place $place)
+    public function edit(Venue $venue)
     {
-        //
+
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Place $place)
+    public function update(Request $request, Venue $venue)
     {
         //
     }
@@ -70,7 +71,7 @@ class PlaceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Place $place)
+    public function destroy(Venue $venue)
     {
         //
     }

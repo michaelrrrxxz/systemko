@@ -11,7 +11,7 @@ export default {
 
 <template>
         <!-- Main Content -->
-        <div class="container mt-5">
+        <div class="col-12 content-card">
 
                 <div class="row">
                     <!-- User Count Card -->
