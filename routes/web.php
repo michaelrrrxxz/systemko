@@ -8,7 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
 
 Route::get('/', function () {
-    return Inertia::render('LandingPage');
+    return inertia('LandingPage');
 })->name('/');
 
 Route::group(['middleware' => 'sleep'], function () {
