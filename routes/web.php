@@ -9,6 +9,9 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\EventContoller;
 
 
+Route::get('/', function () {
+    return Inertia::render('LandingPage');
+})->name('/');
 
 Route::group(['middleware' =>[ 'sleep','auth']], function () {
     Route::resource('users', UserController::class);
