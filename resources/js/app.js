@@ -23,14 +23,24 @@ createInertiaApp({
         return createApp({ render: () => renderComponent(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+
             .mount(el);
     },
+
+    progress: {
+        // The delay after which the progress bar will appear, in milliseconds...
+        delay: 250,
+
+        // The color of the progress bar...
+        color: '#2ecc71',
+
+        // Whether to include the default NProgress styles...
+        includeCSS: true,
+
+        // Whether the NProgress spinner will be shown...
+        showSpinner: false,
+      },
 });
 
-// Initialize Inertia Progress with Bootstrap-compatible styles
-InertiaProgress.init({
-    delay: 250, // Delay before showing the progress bar
-    color: '#2ecc71', // Progress bar color
-    includeCSS: false, // Disable default styles
-    showSpinner: true, // Show spinner
-});
+
+

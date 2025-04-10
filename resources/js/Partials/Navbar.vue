@@ -23,23 +23,41 @@
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
+               
             </ul>
         </nav>
 
-
-
         <!-- Control Sidebar -->
-         <ControlSidebar />
+        <ControlSidebar />
     </div>
 </template>
 
 <script>
-import  ControlSidebar from './ControlSidebar.vue';
-
+import Swal from 'sweetalert2';
+import { Inertia } from '@inertiajs/inertia';
+import ControlSidebar from './ControlSidebar.vue';
 
 export default {
     components: {
         ControlSidebar,
+    },
+    methods: {
+        confirmLogout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will be logged out of your account.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, logout!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send a POST request to the logout route
+                    Inertia.post(route('logout'));
+                }
+            });
+        },
     },
 };
 </script>

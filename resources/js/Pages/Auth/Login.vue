@@ -6,17 +6,22 @@
                 <!-- Email Input -->
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" class="form-control" v-model="form.email"
-                        placeholder="Enter your email" required />
-                    <small v-if="form.errors.email" class="text-danger">{{ form.errors.email }}</small>
+                    <input type="email" id="email" class="form-control" :class="{ 'is-invalid': form.errors.email }"
+                        v-model="form.email" placeholder="Enter your email" />
+                    <div v-if="form.errors.email" class="invalid-feedback">
+                        {{ form.errors.email }}
+                    </div>
                 </div>
 
                 <!-- Password Input -->
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" v-model="form.password"
-                        placeholder="Enter your password" required />
-                    <small v-if="form.errors.password" class="text-danger">{{ form.errors.password }}</small>
+                    <input type="password" id="password" class="form-control"
+                        :class="{ 'is-invalid': form.errors.password }" v-model="form.password"
+                        placeholder="Enter your password" />
+                    <div v-if="form.errors.password" class="invalid-feedback">
+                        {{ form.errors.password }}
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
@@ -61,7 +66,7 @@ export default {
 <style scoped>
 .login-container {
     min-height: 100vh;
-    background: linear-gradient(to right, #2ecc71, #27ae60);
+    background: linear-gradient(to right, #004d00, #004d00);
 }
 
 .login-form {
@@ -73,7 +78,7 @@ export default {
 
 .forgot-password-link {
     text-decoration: none;
-    color: #2ecc71;
+    color: #004d00;
 }
 
 .forgot-password-link:hover {
@@ -81,7 +86,7 @@ export default {
 }
 
 button[type="submit"] {
-    background-color: #2ecc71;
+    background-color: #004d00;
     color: white;
     border: none;
     font-size: 1.1rem;
@@ -90,7 +95,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #27ae60;
+    background-color: #004d00;
 }
 
 button[type="submit"]:focus {
@@ -102,7 +107,7 @@ p {
 }
 
 a {
-    color: #2ecc71;
+    color: #004d00;
 }
 
 a:hover {
@@ -110,6 +115,16 @@ a:hover {
 }
 
 .text-danger {
+    font-size: 0.875rem;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
     font-size: 0.875rem;
 }
 </style>

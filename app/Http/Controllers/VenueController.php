@@ -32,7 +32,7 @@ class VenueController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:venues,name',
             'description' => 'required|string',
             'available' => 'boolean',
         ]);
@@ -74,7 +74,7 @@ class VenueController extends Controller
     public function destroy($id)
     {
         $venue = Venue::findOrFail($id);
-        $venue->delete(); 
+        $venue->delete();
         return redirect()->back()->with('success', 'Venue deleted successfully!');
     }
 }
