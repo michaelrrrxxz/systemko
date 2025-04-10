@@ -27,6 +27,7 @@
                 <!-- Submit Button -->
                 <div class="d-flex justify-content-between align-items-center">
                     <button type="submit" class="btn btn-custom btn-block" :disabled="form.processing">
+                        <span v-if="form.processing" class="spinner"></span>
                         {{ form.processing ? 'Logging in...' : 'Login' }}
                     </button>
                     <Link :href="route('password.request')" class="forgot-password-link">Forgot Password?</Link>
@@ -126,5 +127,28 @@ a:hover {
     display: block;
     color: #dc3545;
     font-size: 0.875rem;
+}
+
+/* Add spinner styles */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #fff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

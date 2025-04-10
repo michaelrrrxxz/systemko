@@ -41,7 +41,7 @@
     <div class="wrapper">
         @inertia
     </div>
-
+    <script src="https://unpkg.com/swapy/dist/swapy.min.js"></script>
     <!-- jQuery (required for AdminLTE functionality) -->
     <script src="{{asset('jquery-3.6.0.min.js')}}"></script>
     <!-- Bootstrap JS -->

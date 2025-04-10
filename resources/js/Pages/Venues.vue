@@ -1,55 +1,30 @@
 <template>
-        <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Venue</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Venue</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
+    <ContentHeader title="Venue" :breadcrumbs="[
+        { label: 'Home', url: '/' },
+        { label: 'Venue' }
+    ]" />
     <div class="col-12 content-card">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title text-white">Venues List</h3>
                 <div class="card-tools">
-                    <!-- Button to open modal -->
-                    <button @click="openModal" class="btn btn-sm btn-success" data-toggle="tooltip"
-                        data-placement="bottom" title="Add Venue">
-                        <i class="fas fa-plus text-white"></i> Add Venue
-                    </button>
+                    <CardButton
+                        label="Add Venue"
+                        :openModal="openModal"
+                        buttonClass="btn-success"
+                        iconClass="fas fa-plus text-white"
+                        tooltipText="Add Venue"
+                        tooltipPlacement="bottom"
+                    />
                 </div>
             </div>
             <div class="card-body">
-                <table id="venues-table" class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th >Description</th>
-                            <th >Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="venue in venues" :key="venue.id">
-                            <td>{{ venue.name }}</td>
-                            <td>{{venue.description }}</td>
-                            <td>
-                                <inertia-link :href="`/venues/${venue.id}/edit`"
-                                    class="btn btn-sm btn-warning">Edit</inertia-link>
-                                <button @click="deleteVenue(venue.id)" class="btn btn-sm btn-danger">Delete</button>
-                            </td>
-                        </tr>
-                        <tr v-if="venues.length === 0">
-                            <td colspan="2" class="text-center">No venues found</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ReusableTable
+                :items="venues"
+                :columns="columns"
+                tableName="venues"
+                :onDelete="deleteVenue"
+                />
             </div>
         </div>
 
@@ -95,14 +70,25 @@
 <script>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Swal from 'sweetalert2';
+import ContentHeader from '@/Components/ContentHeader.vue';
+import ReusableTable from '@/Components/ReusableTable.vue';
+import CardButton from '@/Components/CardButton.vue';
 
 export default {
+    components: {
+        ContentHeader,
+        CardButton,
+        ReusableTable,
+    },
     props: {
         venues: Array,
     },
     layout: AdminLayout,
     data() {
         return {
+            columns: [
+            { label: 'Name', field: 'name' },
+         ],
             newVenue: {
                 name: '',
                 description: '',

@@ -2,17 +2,40 @@
 import AdminLayout from '../../Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
-
+import ContentHeader from '@/Components/ContentHeader.vue';
+import CardButton from '@/Components/CardButton.vue';
+import ReusableTable from '@/Components/ReusableTable.vue';
+import ReusableForm from '@/Components/ReusableForm.vue';
 export default {
     layout: AdminLayout,
     components: {
         Link,
+        ContentHeader,
+        CardButton,
+        ReusableTable,
+        ReusableForm,
     },
     props: {
         users: Array,
     },
     data() {
         return {
+
+      columns: [
+            { label: 'ID', field: 'id' },
+            { label: 'Name', field: 'name' },
+            { label: 'Email', field: 'email' },
+         ],
+         userFields: [
+        { name: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Enter name' },
+        { name: 'email', label: 'Email', type: 'email', required: true, placeholder: 'Enter email' },
+        { name: 'password', label: 'Password', type: 'password', required: true, placeholder: 'Enter password' },
+        { name: 'role', label: 'Role', type: 'select', required: true, options: [
+            { label: 'Select Role', value: '' },
+            { label: 'Admin', value: 'admin' },
+            { label: 'User', value: 'user' },
+          ] },
+      ],
             newUser: {
                 name: '',
                 email: '',
@@ -85,6 +108,14 @@ export default {
                 this.closeModal();
             }
         },
+        editUser(userId) {
+            router.get(route('users.edit', { user: userId }), {
+                onSuccess: () => {
+                    const modal = new bootstrap.Modal(document.getElementById('users-modal'));
+                    modal.show();
+                },
+            });
+        },
         deleteUser(userId) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -124,45 +155,35 @@ export default {
 </script>
 
 <template>
+        <ContentHeader title="Users"
+        :breadcrumbs="[{ label: 'Home', url: '/' },
+        { label: 'Users', url: '/users' }]"
+    />
     <div class="col-12 content-card">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title text-white">Users List</h3>
                 <div class="card-tools">
-                    <button @click="openModal" class="btn btn-sm btn-success" data-toggle="tooltip"
-                        data-placement="bottom" title="Add Place">
-                        <i class="fas fa-plus text-white"></i> Add User
-                    </button>
+                    <CardButton
+                    label="Add User"
+                    :openModal="openModal"
+                    buttonClass="btn-success"
+                    iconClass="fas fa-plus text-white"
+                    tooltipText="Add Venue"
+                    tooltipPlacement="bottom"
+                    />
                 </div>
             </div>
 
             <div class="card-body">
                 <div>
-                    <table class="table table-bordered table-hover table-striped">
-                        <thead class="table-light">
-                            <tr class="text-muted">
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Options</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="user in users" :key="user.id">
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.email }}</td>
-                                <td class="space-between d-flex">
-                                    <Link :href="route('users.edit', { user: user.id })" class="btn btn-primary btn-sm">
-                                    Edit
-                                    </Link>
-                                    <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <ReusableTable
+                        :items="users"
+                        :columns="columns"
+                        tableName="users"
+                        :onEdit="editUser"
+                        :onDelete="deleteUser"
+                        />
                 </div>
             </div>
         </div>
@@ -176,45 +197,14 @@ export default {
                     <h4 class="modal-title" id="users-modal-label">User Form</h4>
                     <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>
                 </div>
-                <form @submit.prevent="saveUser" novalidate>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" v-model="newUser.name"
-                                :class="{ 'is-invalid': errors.name }" required />
-                            <div class="invalid-feedback">{{ errors.name }}</div>
-
-                            <label>Email</label>
-                            <input type="email" class="form-control" v-model="newUser.email"
-                                :class="{ 'is-invalid': errors.email }" required />
-                            <div class="invalid-feedback">{{ errors.email }}</div>
-
-                            <label>Password</label>
-                            <input type="password" class="form-control" v-model="newUser.password"
-                                :class="{ 'is-invalid': errors.password }" required />
-                            <div class="invalid-feedback">{{ errors.password }}</div>
-
-                            <label>Role</label>
-                            <select class="form-control" v-model="newUser.role" required>
-                                <option value="" disabled>Select Role</option>
-                                <option value="admin">Admin</option>
-                                <option value="user">User</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">
-                            Close
-                        </button>
-                        <button type="reset" class="btn btn-warning"
-                            @click="newUser = { name: '', email: '', password: '', role: '' }">
-                            Reset
-                        </button>
-                        <button type="submit" class="btn btn-success">
-                            Save
-                        </button>
-                    </div>
-                </form>
+                <ReusableForm
+                    :fields="userFields"
+                    :formData="newUser"
+                    :errors="errors"
+                    :saveMethod="saveUser"
+                    :closeModal="closeModal"
+                    :resetForm="resetUserForm"
+                    />
             </div>
         </div>
     </div>

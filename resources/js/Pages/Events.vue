@@ -1,35 +1,20 @@
 <template>
+    <ContentHeader title="Events"
+        :breadcrumbs="[{ label: 'Home', url: '/' },
+        { label: 'Events', url: '/events' }]"
+    />
     <div class="col-12 content-card">
       <div class="card">
         <div class="card-header">
             <h3 class="card-title text-white">Events List</h3>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Venue</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="event in events" :key="event.id">
-                        <td>{{ event.id }}</td>
-                        <td>{{ event.name }}</td>
-                        <td>{{ event.venue }}</td>
-                        <td>{{ formatDate(event.start_time) }}</td>
-                        <td>{{ formatDate(event.end_time) }}</td>
-                        <td>
-                            <!-- Add your action buttons here -->
-                            <button class="btn btn-danger" @click="deleteEvent(event.id)">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <ReusableTable
+                :items="events"
+                :columns="columns"
+                tableName="events"
+                :onDelete="deleteEvent"
+            />
         </div>
       </div>
     </div>
@@ -37,12 +22,28 @@
 
 <script>
 import AdminLayout from '../Layouts/AdminLayout.vue';
-
+import ContentHeader from '../Components/ContentHeader.vue';
+import ReusableTable from '../Components/ReusableTable.vue';
 export default {
+    components: {
+        ContentHeader,
+        ReusableTable
+    },
     layout: AdminLayout,
     props: {
         events: Array,
     },
+    data() {
+    return {
+      columns: [
+        { label: 'ID', field: 'id' },
+        { label: 'Name', field: 'name' },
+        { label: 'Venue', field: 'venue' },
+        { label: 'Start Time', field: 'start_time' },
+        { label: 'End Time', field: 'end_time' },
+      ],
+    };
+},
     methods: {
 
         formatDate(date) {
@@ -56,7 +57,7 @@ export default {
             };
             return new Date(date).toLocaleDateString('en-US', options);
         },
-        
+
         deleteEvent(eventId) {
             // Make a request to delete the event
             axios.delete(`/events/${eventId}`)

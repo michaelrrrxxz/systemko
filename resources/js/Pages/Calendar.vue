@@ -1,18 +1,11 @@
 <template>
+    <ContentHeader title="Calendar" :breadcrumbs="[
+        // { label: 'Calendar', url: '/calendar' },
+
+    ]" />
     <div class="col-12 content-card">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title text-white">Calendar</h3>
-                <div class="card-tools">
-                    <!-- Venue Filter -->
-                    <select v-model="selectedFilterVenue" @change="filterEvents" class="form-select">
-                        <option value="">All Venues</option>
-                        <option v-for="venue in venues" :key="venue.id" :value="venue.id">
-                            {{ venue.name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
+
             <div class="card-body">
                 <div id="calendar"></div>
             </div>
@@ -62,10 +55,16 @@
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+
+
+
 import AdminLayout from '../Layouts/AdminLayout.vue';
 import Swal from 'sweetalert2';
-
+import ContentHeader from '@/Components/ContentHeader.vue';
 export default {
+    components: {
+        ContentHeader,
+    },
     layout: AdminLayout,
     props: {
         events: Array,
