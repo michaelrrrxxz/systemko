@@ -9,7 +9,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Slot for injecting content -->
+                    
                     <slot></slot>
                 </div>
                 <div class="modal-footer">
@@ -31,7 +31,7 @@ export default {
         },
         size: {
             type: String,
-            default: '' // e.g., 'modal-lg' or 'modal-sm'
+            default: ''
         }
     },
     methods: {

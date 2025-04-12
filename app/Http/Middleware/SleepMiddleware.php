@@ -15,7 +15,7 @@ class SleepMiddleware
      */
     public function handle($request, Closure $next)
     {
-        sleep(1);
+        sleep(0);
         return $next($request);
     }
 }

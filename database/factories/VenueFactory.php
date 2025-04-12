@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Place;
+use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PlaceFactory extends Factory
+class VenueFactory extends Factory
 {
-    protected $model = Place::class;
+    protected $model = Venue::class;
 
     public function definition()
     {

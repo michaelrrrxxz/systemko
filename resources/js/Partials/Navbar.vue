@@ -23,11 +23,11 @@
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
-               
+
             </ul>
         </nav>
 
-        <!-- Control Sidebar -->
+  
         <ControlSidebar />
     </div>
 </template>

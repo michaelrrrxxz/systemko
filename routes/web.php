@@ -1,28 +1,14 @@
 <?php
 
-use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\EventContoller;
 
-
-// Route::get('/', function () {
-//     return Inertia::render('LandingPage');
-// })->name('/');
-
-Route::group(['middleware' =>[ 'sleep','auth']], function () {
-    Route::resource('users', UserController::class);
-    Route::resource('dashboard', DashboardController::class)->only(['index']);
-    Route::resource('venues', VenueController::class);
-    Route::resource('calendar', CalendarController::class);
-    route::resource('events', EventContoller::class)->only('index');
-
+Route::group(['middleware' => ['role:admin']], function () {
+    require __DIR__ . '/admin.php'; // Admin-specific routes
 });
 
-Route::group(['middleware' => 'sleep'], function () {
-    require __DIR__ . '/auth.php';
+Route::group(['middleware' => ['role:user']], function () {
+    require __DIR__ . '/user.php'; // User-specific routes
 });
+
+require __DIR__ . '/auth.php'; // Authentication routes (accessible to all)
 

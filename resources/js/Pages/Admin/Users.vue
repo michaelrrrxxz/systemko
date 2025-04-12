@@ -1,5 +1,5 @@
 <script>
-import AdminLayout from '../../Layouts/AdminLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
 import ContentHeader from '@/Components/ContentHeader.vue';
@@ -61,7 +61,7 @@ export default {
         validateForm() {
             let isValid = true;
 
-            // Validate name
+
             if (!this.newUser.name) {
                 this.errors.name = 'Name is required.';
                 isValid = false;
@@ -81,7 +81,6 @@ export default {
                 this.errors.email = '';
             }
 
-            // Validate password
             if (!this.newUser.password) {
                 this.errors.password = 'Password is required.';
                 isValid = false;
@@ -156,7 +155,7 @@ export default {
 
 <template>
         <ContentHeader title="Users"
-        :breadcrumbs="[{ label: 'Home', url: '/' },
+        :breadcrumbs="[{ label: 'Admin', url: '/' },
         { label: 'Users', url: '/users' }]"
     />
     <div class="col-12 content-card">
@@ -189,7 +188,6 @@ export default {
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="users-modal" tabindex="-1" aria-labelledby="users-modal-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

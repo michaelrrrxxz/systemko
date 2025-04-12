@@ -13,5 +13,5 @@ class Venue extends Model
         'available',
     ];
 
-    // Define any relationships or methods if needed
+
 }

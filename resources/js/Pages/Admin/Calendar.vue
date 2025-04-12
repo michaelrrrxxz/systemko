@@ -1,6 +1,8 @@
 <template>
     <ContentHeader title="Calendar" :breadcrumbs="[
-        // { label: 'Calendar', url: '/calendar' },
+       { label: 'Admin', url: '/' },
+        { label: 'Calendar'}
+
 
     ]" />
     <div class="col-12 content-card">
@@ -21,7 +23,7 @@
                 </div>
                 <div class="modal-body">
                     <form @submit.prevent="submitEvent">
-                        <!-- <p><strong>Selected Date:</strong> {{ selectedDate }}</p> -->
+
                         <label for="name">Name</label>
                         <input type="text" v-model="name" class="form-control">
                         <label for="venue">Venue</label>
@@ -38,8 +40,9 @@
                         <label for="end_time">End Time</label>
                         <input type="time" id="end_time" v-model="endTime" class="form-control" required />
                         <div class="modal-footer">
+                         
                             <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
-                            <!-- <button type="button" class="btn btn-danger" @click="deleteEvent">Delete Event</button> -->
+
                             <button type="submit" class="btn btn-primary">Add Event</button>
                         </div>
 
@@ -58,7 +61,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 
 
-import AdminLayout from '../Layouts/AdminLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Swal from 'sweetalert2';
 import ContentHeader from '@/Components/ContentHeader.vue';
 export default {
@@ -74,13 +77,14 @@ export default {
         return {
             selectedDate: null,
             selectedVenue: null,
-            selectedFilterVenue: '', // For filtering events
+            selectedFilterVenue: '',
             name: '',
             description: '',
             startTime: '',
             endTime: '',
             calendar: null,
             editingEvent: null,
+
         };
     },
     mounted() {
@@ -114,9 +118,9 @@ export default {
         const calendarEl = document.getElementById('calendar');
         const holidayEvents = philippineHolidays.map(holiday => ({
     ...holiday,
-    display: 'background',  // Or remove this line if you want it as normal event
-    color: 'rgba(255, 0, 0, 0.2)',  // light red background
-    textColor: 'red',              // red text (if it's shown)
+    display: 'background',
+    color: 'rgba(255, 0, 0, 0.2)',
+    textColor: 'red',
     classNames: ['philippine-holiday']
 }));
 
@@ -140,7 +144,7 @@ this.calendar.render();
     },
     methods: {
         getVenueColor(venueId) {
-            // Assign colors based on venue ID
+
             const colors = ['#FF5733', '#33FF57', '#3357FF', '#FFC300', '#DAF7A6'];
             return colors[venueId % colors.length] || '#CCCCCC';
         },
@@ -197,7 +201,7 @@ this.calendar.render();
         handleEventClick(info) {
             const event = info.event;
 
-            // Populate the form with the event's details
+
             this.editingEvent = event;
             this.name = event.title;
             this.description = event.extendedProps.description || '';
@@ -205,7 +209,6 @@ this.calendar.render();
             this.startTime = event.start.toTimeString().split(' ')[0].slice(0, 5);
             this.endTime = event.end ? event.end.toTimeString().split(' ')[0].slice(0, 5) : '';
             this.selectedVenue = event.extendedProps.venue_id || null;
-
             const modal = new bootstrap.Modal(document.getElementById('calendar-modal'));
             modal.show();
         },
@@ -242,6 +245,7 @@ this.calendar.render();
                         this.editingEvent.setStart(`${this.selectedDate}T${this.startTime}`);
                         this.editingEvent.setEnd(`${this.selectedDate}T${this.endTime}`);
                         this.editingEvent.setProp('color', this.getVenueColor(this.selectedVenue));
+
                     }
                 } else {
                     const response = await axios.post('/calendar', {
@@ -301,7 +305,7 @@ this.calendar.render();
                             timer: 1500,
                         });
 
-                        // Remove the event from the calendar
+
                         this.editingEvent.remove();
                         this.closeModal();
                     }
@@ -332,7 +336,7 @@ this.calendar.render();
     box-sizing: border-box;
 }
 
-/* Header Toolbar */
+
 .fc .fc-toolbar {
     background-color: #004d00;
     border-bottom: 6px solid #5c7c66;
@@ -340,7 +344,6 @@ this.calendar.render();
     border-radius: 8px 8px 0 0;
 }
 
-/* Toolbar Title */
 .fc .fc-toolbar-title {
     color: #ffffff;
     font-size: 2rem;
@@ -348,7 +351,7 @@ this.calendar.render();
     text-align: center;
 }
 
-/* Buttons */
+
 .fc .fc-button {
     background-color: #5c7c66 !important;
     color: #ffffff !important;
@@ -362,36 +365,32 @@ this.calendar.render();
     background-color: #3e5a4a !important;
 }
 
-/* Day Grid Cell Border */
 .fc .fc-daygrid-day-frame {
     border: 1px solid #333 !important;
 }
 
-/* Date Numbers */
+
 .fc .fc-daygrid-day-number {
     font-size: 2rem !important;
     font-weight: 700 !important;
     padding: 4px;
 }
 
-/* Red Sundays */
+
 .fc-day-sun .fc-daygrid-day-number {
     color: red !important;
 }
 
-/* Blue Saturdays */
+
 .fc-day-sat .fc-daygrid-day-number {
     color: #4d94ff !important;
 }
 
-/* Week Numbers */
 .fc .fc-daygrid-week-number {
     font-size: 1rem;
     font-weight: bold;
     padding: 10px;
 }
-
-/* Philippine Holiday Styling */
 .fc-event.philippine-holiday {
     background-color: red !important;
     color: white !important;
@@ -400,7 +399,6 @@ this.calendar.render();
     padding: 2px 4px;
 }
 
-/* Header Day Names */
 .fc .fc-col-header-cell-cushion {
     font-weight: bold;
 }

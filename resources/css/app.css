@@ -18,10 +18,27 @@
     background-color: var(--primary-green);
 }
 
+/* Active state */
 .sidebar-dark-olive .nav-sidebar>.nav-item>.nav-link.active,
-.sidebar-light-olive .nav-sidebar>.nav-item>.nav-link.active {
+.sidebar-light-olive .nav-sidebar>.nav-item>.nav-link.active,
+.sidebar-dark-olive .nav-sidebar>div>.nav-item>.nav-link.active,
+.sidebar-light-olive .nav-sidebar>div>.nav-item>.nav-link.active {
     background-color: var(--primary-green);
     color: #fff;
+}
+
+.sidebar-dark-olive .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-light-olive .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-dark-olive .nav-sidebar > div > .nav-item > .nav-link.active,
+.sidebar-light-olive .nav-sidebar > div > .nav-item > .nav-link.active {
+    background-color: var(--primary-green); /* Selected item gets a background */
+    color: #fff; /* Optional: white text for contrast */
+}
+
+
+.sidebar-light-olive .nav-sidebar>div>.nav-item>.nav-link:hover {
+
+    color: grey;
 }
 
 input::-webkit-outer-spin-button,

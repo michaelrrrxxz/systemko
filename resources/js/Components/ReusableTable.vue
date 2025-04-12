@@ -39,19 +39,19 @@
       },
       tableId: {
         type: String,
-        default: 'venues-table', // Default table ID if not provided
+        default: 'table',
       },
       tableName: {
         type: String,
-        required: true, // Name of the table (e.g., 'venues')
+        required: true,
       },
       editAction: {
         type: Boolean,
-        default: true, // Default to show Edit button
+        default: true,
       },
       deleteAction: {
         type: Boolean,
-        default: true, // Default to show Delete button
+        default: true,
       },
       onDelete: {
         type: Function,
@@ -60,12 +60,10 @@
     },
     methods: {
       handleDelete(id) {
-        this.onDelete(id); // Calls the onDelete function passed from the parent
+        this.onDelete(id);
       },
     },
   };
   </script>
 
-  <style scoped>
-  /* Optionally add custom styles for the table here */
-  </style>
+

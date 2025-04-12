@@ -3,7 +3,7 @@
         <div class="login-form p-4 border rounded shadow-sm">
             <h2 class="text-center mb-4">Login</h2>
             <form @submit.prevent="submit">
-                <!-- Email Input -->
+
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" class="form-control" :class="{ 'is-invalid': form.errors.email }"
@@ -13,7 +13,7 @@
                     </div>
                 </div>
 
-                <!-- Password Input -->
+
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" class="form-control"
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
+
                 <div class="d-flex justify-content-between align-items-center">
                     <button type="submit" class="btn btn-custom btn-block" :disabled="form.processing">
                         <span v-if="form.processing" class="spinner"></span>
@@ -55,7 +55,7 @@ export default {
 
         const submit = () => {
             form.post(route('login'), {
-                onFinish: () => form.reset('password'), // Reset password field after submission
+                onFinish: () => form.reset('password'), 
             });
         };
 

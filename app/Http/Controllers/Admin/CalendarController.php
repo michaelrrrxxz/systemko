@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
@@ -19,10 +20,11 @@ class CalendarController extends Controller
                 'title' => $event->name,
                 'start' => $event->start_time,
                 'end' => $event->end_time,
+                'added_by' => $event->added_by,
             ];
         });
 
-        return inertia('Calendar', [
+        return inertia('Admin/Calendar', [
             'venues' => Venue::all(),
             'events' => $events, // Pass formatted events to the frontend
         ]);
@@ -55,11 +57,11 @@ class CalendarController extends Controller
             ->whereDate('start_time', $request->date)
             ->where(function ($query) use ($request) {
                 $query->whereBetween('start_time', [$request->start_time, $request->end_time])
-                      ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                      ->orWhere(function ($query) use ($request) {
-                          $query->where('start_time', '<=', $request->start_time)
-                                ->where('end_time', '>=', $request->end_time);
-                      });
+                    ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+                    ->orWhere(function ($query) use ($request) {
+                        $query->where('start_time', '<=', $request->start_time)
+                            ->where('end_time', '>=', $request->end_time);
+                    });
             })
             ->exists();
 
@@ -67,13 +69,21 @@ class CalendarController extends Controller
             return response()->json(['success' => false, 'message' => 'The selected time overlaps with another event.'], 400);
         }
 
+        // Determine approval status based on user role
+        $isAdmin = auth()->user()->hasRole('admin'); // Check if the user has the 'admin' role
+        $approvedBy = $isAdmin ? auth()->id() : null; // Set approved_by if admin
+        $approvedAt = $isAdmin ? now() : null; // Set approved_at if admin
+
         // Create the event
         $event = Event::create([
             'name' => $request->name,
+            'description' => $request->description,
             'venue_id' => $request->venue_id,
-            'user_id' => auth()->id(),
             'start_time' => $request->date . ' ' . $request->start_time,
             'end_time' => $request->date . ' ' . $request->end_time,
+            'added_by' => auth()->id(), // Add the authenticated user's ID
+            'approved_by' => $approvedBy, // Set approved_by if admin
+            'approved_at' => $approvedAt, // Set approved_at if admin
         ]);
 
         return response()->json(['success' => true, 'event' => $event]);

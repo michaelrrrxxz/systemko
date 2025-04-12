@@ -1,10 +1,13 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
-defineProps({
-  auth: Object, // Access the shared 'auth' prop in your component
-});
+const page = usePage();
+const userRoles = page.props.auth.user.roles; // Get the user's roles
+
+// Check if the user has the 'admin' role
+const isAdmin = userRoles.includes('admin');
 </script>
+
 
 <template>
     <aside class="main-sidebar elevation-4 sidebar-light-olive">
@@ -21,62 +24,63 @@ defineProps({
                 <div class="info">
                     <!-- Display the logged-in user's name and email -->
                     <a href="#" class="d-block">
-                        <!-- <h5 class="text-white">Welcome, {{ $page.props.user.name }}!</h5> -->
+                        {{ $page.props.auth.user.name }}
                         <!-- <p class="text-muted mb-0">{{ $page.props.user.email }}</p> -->
                     </a>
                 </div>
             </div>
 
             <nav class="mt-2 mb-0">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
                     <li class="nav-item">
-                        <Link
-                            :href="route('dashboard.index')"
-                            class="nav-link"
-                            :class="{ active: $page.url.startsWith('/dashboard') }"
-                        >
+                        <Link :href="route('dashboard.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/dashboard') }">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
+                        <p>Dashboard</p>
+                        </Link>
+                    </li>
+
+                    <!-- admin links -->
+                    <div v-if="isAdmin">
+                        <li class="nav-item">
+                        <Link :href="route('users.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/users') }">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Users</p>
                         </Link>
                     </li>
                     <li class="nav-item">
-                        <Link
-                            :href="route('users.index')"
-                            class="nav-link"
-                            :class="{ active: $page.url.startsWith('/users') }"
-                        >
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>Users</p>
+                        <Link :href="route('venues.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/venues') }">
+                        <i class="nav-icon fas fa-map-marker"></i>
+                        <p>Venue</p>
+                        </Link>
+                    </li>
+                    <li class="nav-item" v-if="isAdmin">
+                        <Link :href="route('calendar.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/calendar') }">
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>Calendar</p>
+                        </Link>
+                    </li>
+                    </div>
+
+                     <!-- end of admin links -->
+                    <!-- Show this menu item only if the user is an admin -->
+
+                    <li class="nav-item" v-else="isAdmin">
+                        <Link :href="route('user-calendar.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/calendar') }">
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>Calendar</p>
                         </Link>
                     </li>
                     <li class="nav-item">
-                        <Link
-                            :href="route('venues.index')"
-                            class="nav-link"
-                            :class="{ active: $page.url.startsWith('/venues') }"
-                        >
-                            <i class="nav-icon fas fa-map-marker"></i>
-                            <p>Venue</p>
-                        </Link>
-                    </li>
-                    <li class="nav-item">
-                        <Link
-                            :href="route('calendar.index')"
-                            class="nav-link"
-                            :class="{ active: $page.url.startsWith('/calendar') }"
-                        >
-                            <i class="nav-icon fas fa-calendar"></i>
-                            <p>Calendar</p>
-                        </Link>
-                    </li>
-                    <li class="nav-item">
-                        <Link
-                            :href="route('events.index')"
-                            class="nav-link"
-                            :class="{ active: $page.url.startsWith('/events') }"
-                        >
-                            <i class="nav-icon fas fa-bullhorn"></i>
-                            <p>Events</p>
+                        <Link :href="route('events.index')" class="nav-link"
+                            :class="{ active: $page.url.startsWith('/events') }">
+                        <i class="nav-icon fas fa-bullhorn"></i>
+                        <p>Events</p>
                         </Link>
                     </li>
                 </ul>
@@ -84,6 +88,3 @@ defineProps({
         </div>
     </aside>
 </template>
-
-
-

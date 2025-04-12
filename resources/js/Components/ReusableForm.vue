@@ -4,7 +4,6 @@
         <div class="form-group" v-for="(field, index) in fields" :key="index">
           <label :for="field.name">{{ field.label }}</label>
 
-          <!-- Input type based on field type -->
           <input
             v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'"
             :type="field.type"
@@ -42,32 +41,32 @@
   <script>
   export default {
     props: {
-      // Fields are passed dynamically from parent component
+
       fields: {
         type: Array,
         required: true,
       },
-      // Form data, passed to bind to the fields
+
       formData: {
         type: Object,
         required: true,
       },
-      // Errors for validation
+
       errors: {
         type: Object,
         required: true,
       },
-      // Save method to handle form submission
+
       saveMethod: {
         type: Function,
         required: true,
       },
-      // Close modal method
+
       closeModal: {
         type: Function,
         required: true,
       },
-      // Reset form method
+
       resetForm: {
         type: Function,
         required: true,
@@ -75,12 +74,12 @@
     },
     methods: {
       handleSubmit() {
-        this.saveMethod(); // Call the save method passed from the parent
+        this.saveMethod(); 
       },
     },
   };
   </script>
 
   <style scoped>
-  /* You can add specific styles here if needed */
+
   </style>

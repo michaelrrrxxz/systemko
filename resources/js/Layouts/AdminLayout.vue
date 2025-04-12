@@ -1,19 +1,12 @@
 <template>
     <div class="wrapper">
-        <!-- Navbar -->
         <Navbar />
-
-        <!-- Sidebar -->
         <Sidebar />
-
-        <!-- Content Wrapper -->
         <div class="content-wrapper">
             <section class="content">
                 <slot />
             </section>
         </div>
-
-        <!-- Footer -->
         <Footer />
     </div>
 </template>
@@ -31,7 +24,3 @@ export default {
     },
 };
 </script>
-
-<style>
-/* Add any custom AdminLTE styles here */
-</style>

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
@@ -15,11 +16,12 @@ class EventContoller extends Controller
                 'name' => $event->name,
                 'start_time' => $event->start_time,
                 'end_time' => $event->end_time,
-                'venue' => $event->venue ? $event->venue->name : null,  // If venue exists, include its name
+                'venue' => $event->venue ? $event->venue->name : null,
+                'added_by' => $event->user ? $event->user->name : null,
             ];
         });
 
-        return inertia('Events', [
+        return inertia('Admin/Events', [
             'events' => $events,
         ]);
     }

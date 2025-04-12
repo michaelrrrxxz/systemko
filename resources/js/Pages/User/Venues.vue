@@ -177,6 +177,3 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Optional styling for the modal */
-</style>

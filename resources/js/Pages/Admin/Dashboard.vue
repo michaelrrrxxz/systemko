@@ -1,6 +1,6 @@
 <script>
-import AdminLayout from '../Layouts/AdminLayout.vue';
-import ContentHeader from '../Components/ContentHeader.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ContentHeader from '@/Components/ContentHeader.vue';
 
 export default {
   components: {
@@ -14,7 +14,7 @@ export default {
     futureEvents: Number,
   },
   mounted() {
-    // Ensure Swapy is available and then initialize it
+
     if (window.Swapy) {
       const container = this.$refs.swapyContainer;
       Swapy.createSwapy(container);
@@ -29,7 +29,7 @@ export default {
   <ContentHeader
     title="Dashboard"
     :breadcrumbs="[
-      { label: 'Home', url: '/' },
+      { label: 'Admin', url: '/' },
       { label: 'Dashboard', url: '/dashboard' },
     ]"
   />

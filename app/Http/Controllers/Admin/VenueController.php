@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use App\Models\Venue;
 use Illuminate\Http\Request;
+Use App\Http\Requests\Admin\Venue\StoreRequest;
 
 class VenueController extends Controller
 {
@@ -13,7 +15,7 @@ class VenueController extends Controller
     public function index()
     {
         $venue = Venue::all();
-        return inertia('Venues', [
+        return inertia('Admin/Venues', [
             'venues' => $venue,
         ]);
     }
@@ -29,17 +31,10 @@ class VenueController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:venues,name',
-            'description' => 'required|string',
-            'available' => 'boolean',
-        ]);
-
-        // Create the new place
-        Venue::create($request->all());
-
+        $validated= $request->validated();
+        Venue::create($validated);
         return redirect()->route('venues.index');
     }
 

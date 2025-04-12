@@ -16,12 +16,19 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->foreignId('venue_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('added_by')->nullable(); // user who created the event
             $table->datetime('start_time');
             $table->datetime('end_time');
+
+            // ✅ Approval columns
+            $table->foreignId('approved_by')->nullable(); // user who approved/disapproved
+            $table->datetime('approved_at')->nullable(); // when approval happened
+            $table->text('remarks')->nullable(); // reason for approval/disapproval
+
             $table->softDeletes();
             $table->timestamps();
         });
+
     }
 
     /**

@@ -1,25 +1,27 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Create a specific user
-        User::factory()->create([
+        // Create the admin user
+        $admin = User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'password' => bcrypt('password'), // Set a default password
+            'password' => bcrypt('password'), // Secure this in real apps
         ]);
 
-        // Create additional random users
+     
+        // Assign the admin role
+        $admin->assignRole('admin'); // 👈 This line does the magic
+
+        // Create additional users
         User::factory(10)->create();
     }
 }
+

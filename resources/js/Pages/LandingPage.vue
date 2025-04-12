@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- Hero Section -->
+      
         <section class="hero-section text-white text-center d-flex justify-content-center align-items-center">
             <div class="hero-content">
                 <h1 class="display-4 mb-4">Welcome to Our Service</h1>
@@ -9,7 +9,6 @@
             </div>
         </section>
 
-        <!-- Calendar Section -->
         <section class="calendar-section py-5 text-center">
             <div class="container">
                 <h2 class="mb-4">Upcoming Events</h2>
@@ -17,7 +16,7 @@
             </div>
         </section>
 
-        <!-- Footer -->
+
         <footer class="footer bg-dark text-white text-center py-3">
             <p>&copy; 2025 Our Service. All Rights Reserved.</p>
         </footer>
@@ -27,7 +26,7 @@
 <script>
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction'; // Needed!
+import interactionPlugin from '@fullcalendar/interaction';
 import { Link } from '@inertiajs/vue3';
 
 export default {
@@ -36,7 +35,7 @@ export default {
         Link,
     },
     props: {
-        events: Array, // Events passed from backend
+        events: Array,
     },
     data() {
         return {
@@ -104,7 +103,6 @@ export default {
     },
     methods: {
         getVenueColor(venue_id) {
-            // Optional: assign colors to events by venue
             const colors = ['#3498db', '#2ecc71', '#f39c12', '#9b59b6'];
             return colors[venue_id % colors.length];
         },

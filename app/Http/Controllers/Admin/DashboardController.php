@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Event;
 class DashboardController extends Controller
@@ -18,7 +17,7 @@ class DashboardController extends Controller
         // Get the count of future events
         $futureEvents = Event::future()->count();
 
-        return inertia('Dashboard', [
+        return inertia('Admin/Dashboard', [
             'userCount' => User::count(),
             'title' => 'Admin Dashboard',
             'finishedEvents' => $finishedEvents,

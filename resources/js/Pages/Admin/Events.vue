@@ -1,6 +1,6 @@
 <template>
     <ContentHeader title="Events"
-        :breadcrumbs="[{ label: 'Home', url: '/' },
+        :breadcrumbs="[{ label: 'Admin', url: '/' },
         { label: 'Events', url: '/events' }]"
     />
     <div class="col-12 content-card">
@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import AdminLayout from '../Layouts/AdminLayout.vue';
-import ContentHeader from '../Components/ContentHeader.vue';
-import ReusableTable from '../Components/ReusableTable.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ContentHeader from '@/Components/ContentHeader.vue';
+import ReusableTable from '@/Components/ReusableTable.vue';
 export default {
     components: {
         ContentHeader,
@@ -41,6 +41,7 @@ export default {
         { label: 'Venue', field: 'venue' },
         { label: 'Start Time', field: 'start_time' },
         { label: 'End Time', field: 'end_time' },
+        { label: 'Added By', field: 'added_by'},
       ],
     };
 },
@@ -59,10 +60,10 @@ export default {
         },
 
         deleteEvent(eventId) {
-            // Make a request to delete the event
+
             axios.delete(`/events/${eventId}`)
                 .then(response => {
-                    // After successful deletion, update the local events array
+
                     this.events = this.events.filter(event => event.id !== eventId);
                 })
                 .catch(error => {

@@ -61,7 +61,7 @@
   <style scoped>
   .forgot-password-container {
     min-height: 100vh;
-    background: linear-gradient(to right, #2ecc71, #27ae60);
+    background: linear-gradient(to right, #004d00, #004d00);
   }
 
   .forgot-password-form {
@@ -76,7 +76,7 @@
   }
 
   button[type="submit"] {
-    background-color: #2ecc71;
+    background-color: #004d00;
     color: white;
     border: none;
     font-size: 1.1rem;
@@ -85,7 +85,7 @@
   }
 
   button[type="submit"]:hover {
-    background-color: #27ae60;
+    background-color: #004d00;
   }
 
   button[type="submit"]:focus {
@@ -97,7 +97,7 @@
   }
 
   a {
-    color: #2ecc71;
+    color: #004d00;
   }
 
   a:hover {
