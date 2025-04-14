@@ -71,7 +71,7 @@ const isAdmin = userRoles.includes('admin');
 
                     <li class="nav-item" v-else="isAdmin">
                         <Link :href="route('user-calendar.index')" class="nav-link"
-                            :class="{ active: $page.url.startsWith('/calendar') }">
+                            :class="{ active: $page.url.startsWith('/user-calendar') }">
                         <i class="nav-icon fas fa-calendar"></i>
                         <p>Calendar</p>
                         </Link>

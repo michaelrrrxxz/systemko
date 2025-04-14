@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Response;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Illuminate\Http\RedirectResponse;
 class LoginController extends Controller
 {
     public function showLoginForm()
@@ -35,15 +38,15 @@ class LoginController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
-        // Return Inertia redirect
-        return redirect('/'); // Or route('login') if using named route
+        return redirect('/');
     }
 
 }

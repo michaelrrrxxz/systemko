@@ -6,9 +6,16 @@
             <nav class="mt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#" @click="confirmLogout" role="button">
+                        <!-- <a class="nav-link text-white" href="#" @click="confirmLogout" role="button">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout
-                        </a>
+                        </a> -->
+                        <Link
+                    :href="route('logout')"
+                    method="post"
+                    as="button"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >Log Out</Link
+                >
                     </li>
                 </ul>
             </nav>
@@ -19,9 +26,13 @@
 <script>
 import Swal from 'sweetalert2';
 import { Inertia } from '@inertiajs/inertia';
+import { Link, usePage } from '@inertiajs/vue3';
 
 
 export default {
+    components: {
+        Link,
+    },
     methods: {
         confirmLogout() {
             Swal.fire({
@@ -36,7 +47,7 @@ export default {
                 if (result.isConfirmed) {
                     Inertia.post(route('logout'), {}, {
                         onSuccess: () => {
-                            // Reload the page after successful logout
+                            // Force a full page reload to ensure the session is cleared
                             window.location.reload();
                         },
                         onError: (errors) => {

@@ -217,7 +217,7 @@ this.calendar.render();
 
             try {
                 if (this.editingEvent) {
-                    const response = await axios.put(`/calendar/${this.editingEvent.id}`, {
+                    const response = await axios.put(`/user-calendar/${this.editingEvent.id}`, {
                         name: this.name,
                         description: this.description,
                         date: this.selectedDate,
@@ -244,7 +244,7 @@ this.calendar.render();
                         this.editingEvent.setProp('color', this.getVenueColor(this.selectedVenue));
                     }
                 } else {
-                    const response = await axios.post('/calendar', {
+                    const response = await axios.post('/user-calendar', {
                         name: this.name,
                         description: this.description,
                         date: this.selectedDate,

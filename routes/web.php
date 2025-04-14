@@ -1,14 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 
-Route::group(['middleware' => ['role:admin']], function () {
-    require __DIR__ . '/admin.php'; // Admin-specific routes
+Route::resource('dashboard', DashboardController::class)->only(['index']);
+
+Route::group(['middleware' => ['role:super-user|admin']], function () {
+    require __DIR__ . '/admin.php';
 });
 
-Route::group(['middleware' => ['role:user']], function () {
-    require __DIR__ . '/user.php'; // User-specific routes
+Route::group(['middleware' => ['role:super-user|user']], function () {
+    require __DIR__ . '/user.php';
 });
 
-require __DIR__ . '/auth.php'; // Authentication routes (accessible to all)
+require __DIR__ . '/auth.php';
 
